@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang='en' ng-app='app'>
+<head>
+  <base href="/">
+  <meta charset='UTF-8'>
+  <title>ng-textcomplete example</title>
+
+  <link rel="stylesheet" href="./styles/normalize.css"/>
+  <link rel="stylesheet" href="./styles/style.css"/>
+
+  <script src='./bower_components/jquery/dist/jquery.js'></script>
+  <script src='./bower_components/angular/angular.js'></script>
+  <script src='./bower_components/ng-textcomplete/ng-textcomplete.js'></script>
+  <script src='./textcomplete-directive.js'></script>
+  <script src='./demo-app.js'></script>
+
+</head>
+<body ng-controller='textcompleteCtrl as vm'>
+
+<div id='content'>
+  <div><h1>ng-textcomplete example local</h1></div>
+
+  <!-- <h2>example of using as an element</h2> -->
+
+  <div class='list'>Foods: {{vm.previewMembers.local}}</div>
+
+  <textcomplete members='vm.membersLocal' message='vm.messageLocal'></textcomplete>
+
+  <div class='list'>result: {{vm.messageLocal}}</div>
+
+  <div><h1>ng-textcomplete example remote</h1></div>
+
+  <!-- <h2>example of using as an element</h2> -->
+
+  <div>
+    <button type="button" ng-click="vm.previewMembers.showRemote = !vm.previewMembers.showRemote">
+      Toggle remote member view
+    </button>
+  </div>
+  <div class='list' ng-show="vm.previewMembers.remote.length <= 10 || vm.previewMembers.showRemote">
+    Foods: {{vm.previewMembers.remote}}
+  </div>
+
+  <div>
+    <textcomplete members='vm.membersRemote' message='vm.messageRemote'></textcomplete>
+  </div>
+
+  <div class='list'>result: {{vm.messageRemote}}</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "textcomplete",
+  "authors": [
+    "Yurko Fedoriv <yfedoriv@nutritionix.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ng-textcomplete": "^0.6.0",
+    "angular": "^1.5.3",
+    "jquery": "^2.2.2"
+  }
+}
