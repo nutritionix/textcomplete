@@ -49,7 +49,7 @@
         data: [],
         priority: priority || 0,
         limit: limit || -1,
-        template: angular.isFunction(template) || function (value) {
+        template: angular.isFunction(template) ? template : function (value) {
           return value;
         }
       };

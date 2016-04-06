@@ -47,7 +47,7 @@
           data:     [],
           priority: priority || 0,
           limit:    limit || -1,
-          template: angular.isFunction(template) || (value => value)
+          template: angular.isFunction(template) ? template : (value => value)
         };
 
         $q.when(source).then(data => {
@@ -57,7 +57,7 @@
             $log.error('Source did not resolve to array:', source, data);
           }
         });
-        
+
         this.sources.push(sourceDefinition);
 
         this.sources.sort((first, second) => {

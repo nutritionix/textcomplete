@@ -1,6 +1,6 @@
 {
   "name": "nix-angular-textcomplete-directive",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "title": "Nutritionix Angular Textcomplete Directive",
   "description": "AngularJS directive for pop up suggestions on textarea",
   "repository": {
