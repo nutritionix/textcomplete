@@ -5,6 +5,7 @@
     .factory('TextCompleteStrategy', function ($q, $filter, $log) {
       function TextCompleteStrategy() {
         this.sources = [];
+        this.minChars = 1;
 
       }
 
@@ -12,7 +13,7 @@
       TextCompleteStrategy.prototype.search = function (term, callback) {
         let results = [];
 
-        if ((term && term.toString() || '').length >= 3) {
+        if ((term && term.toString() || '').length >= this.minChars) {
           this.sources.forEach(source => {
             if (source.data.length) {
               let suggestions = [];
@@ -33,6 +34,7 @@
           });
         }
 
+        this.minChars = 2;
         callback(results);
       };
       TextCompleteStrategy.prototype.index = 2;
@@ -70,12 +72,12 @@
       return {
         restrict: 'EA',
         scope:    {
-          strategy: '=',
-          message:  '='
+          strategy: '='
         },
         replace:  true,
-        template: '<textarea ng-model="message" type="text"></textarea>',
-        link:     function (scope, element/*, attributes*/) {
+        require:  'ngModel',
+        template: '<textarea></textarea>',
+        link:     function (scope, element, attributes, ngModelController) {
           var textcomplete = new Textcomplete(
             element,
             angular.isArray(scope.strategy) ? scope.strategy : [scope.strategy]
@@ -84,7 +86,7 @@
           angular.element(textcomplete).on({
             'textComplete:select': function (e, value) {
               scope.$apply(function () {
-                scope.message = value
+                ngModelController.$setViewValue(value);
               })
             },
             'textComplete:show':   function (e) {

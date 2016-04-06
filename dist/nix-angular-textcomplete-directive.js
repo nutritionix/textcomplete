@@ -6,13 +6,14 @@
   angular.module('nix.textcomplete', ['ngTextcomplete']).factory('TextCompleteStrategy', ["$q", "$filter", "$log", function ($q, $filter, $log) {
     function TextCompleteStrategy() {
       this.sources = [];
+      this.minChars = 1;
     }
 
     TextCompleteStrategy.prototype.match = /(^|\s)([\w\-]*)$/;
     TextCompleteStrategy.prototype.search = function (term, callback) {
       var results = [];
 
-      if ((term && term.toString() || '').length >= 3) {
+      if ((term && term.toString() || '').length >= this.minChars) {
         this.sources.forEach(function (source) {
           if (source.data.length) {
             var suggestions = [];
@@ -31,6 +32,7 @@
         });
       }
 
+      this.minChars = 2;
       callback(results);
     };
     TextCompleteStrategy.prototype.index = 2;
@@ -65,20 +67,18 @@
     return {
       restrict: 'EA',
       scope: {
-        strategy: '=',
-        message: '='
+        strategy: '='
       },
       replace: true,
-      template: '<textarea ng-model="message" type="text"></textarea>',
-      link: function link(scope, element /*, attributes*/) {
-        console.log(scope.strategy);
-
+      require: 'ngModel',
+      template: '<textarea></textarea>',
+      link: function link(scope, element, attributes, ngModelController) {
         var textcomplete = new Textcomplete(element, angular.isArray(scope.strategy) ? scope.strategy : [scope.strategy]);
 
         angular.element(textcomplete).on({
           'textComplete:select': function textCompleteSelect(e, value) {
             scope.$apply(function () {
-              scope.message = value;
+              ngModelController.$setViewValue(value);
             });
           },
           'textComplete:show': function textCompleteShow(e) {
