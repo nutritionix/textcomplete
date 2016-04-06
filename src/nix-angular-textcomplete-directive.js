@@ -42,7 +42,7 @@
         return '$1' + mention + ' ';
       };
 
-      TextCompleteStrategy.prototype.addSource = function (source, priority, limit) {
+      TextCompleteStrategy.prototype.addSource = function (source, priority, limit, sorted) {
         let sourceDefinition = {
           data:     [],
           priority: priority || 0,
@@ -51,7 +51,7 @@
 
         $q.when(source).then(data => {
           if (angular.isArray(data)) {
-            sourceDefinition.data = $filter('orderBy')(data, 'length');
+            sourceDefinition.data = sorted ? data : $filter('orderBy')(data, 'length');
           } else {
             $log.error('Source did not resolve to array:', source, data);
           }
