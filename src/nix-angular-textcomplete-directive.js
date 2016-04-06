@@ -11,25 +11,25 @@
 
       TextCompleteStrategy.prototype.match = /(^|\s)([\w\-]*)$/;
       TextCompleteStrategy.prototype.search = function (term, callback) {
-        let results = [];
+        let results = [], resultTexts = [];
 
         if ((term && term.toString() || '').length >= this.minChars) {
           this.sources.forEach(source => {
             if (source.data.length) {
               let suggestions = [];
               for (let i = 0; i < source.data.length; i += 1) {
-                if (results.indexOf(source.data[i]) === -1 &&
+                if (resultTexts.indexOf(source.data[i]) === -1 &&
                   source.data[i].toLowerCase().indexOf(term.toLowerCase()) > -1) {
                   suggestions.push(source.data[i]);
                 }
-
 
                 if (source.limit > 0 && suggestions.length >= source.limit) {
                   break;
                 }
               }
 
-              results = results.concat(suggestions);
+              resultTexts = resultTexts.concat(suggestions);
+              results = results.concat(suggestions.map(text => { return {text, source}; }));
             }
           });
         }
@@ -42,11 +42,12 @@
         return '$1' + mention + ' ';
       };
 
-      TextCompleteStrategy.prototype.addSource = function (source, priority, limit, sorted) {
+      TextCompleteStrategy.prototype.addSource = function (source, priority, limit, sorted, template) {
         let sourceDefinition = {
           data:     [],
           priority: priority || 0,
-          limit:    limit || -1
+          limit:    limit || -1,
+          template: angular.isFunction(template) || (value => value)
         };
 
         $q.when(source).then(data => {
@@ -56,8 +57,7 @@
             $log.error('Source did not resolve to array:', source, data);
           }
         });
-
-
+        
         this.sources.push(sourceDefinition);
 
         this.sources.sort((first, second) => {
@@ -65,6 +65,9 @@
         });
       };
 
+      TextCompleteStrategy.prototype.template = function (value) {
+        return value.source.template(value.text);
+      };
 
       return TextCompleteStrategy;
     })
