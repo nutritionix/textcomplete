@@ -38,8 +38,8 @@
         callback(results);
       };
       TextCompleteStrategy.prototype.index = 2;
-      TextCompleteStrategy.prototype.replace = function (mention) {
-        return '$1' + mention + ' ';
+      TextCompleteStrategy.prototype.replace = function (value) {
+        return '$1' + value.text + ' ';
       };
 
       TextCompleteStrategy.prototype.addSource = function (source, priority, limit, sorted, template) {
