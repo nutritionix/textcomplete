@@ -19,7 +19,7 @@
           if (source.data.length) {
             var suggestions = [];
             for (var i = 0; i < source.data.length; i += 1) {
-              if (resultTexts.indexOf(source.data[i]) === -1 && source.data[i].toLowerCase().indexOf(term.toLowerCase()) > -1) {
+              if (resultTexts.indexOf(source.data[i]) === -1 && source.data[i].toLowerCase().indexOf(term.toLowerCase()) === 0) {
                 suggestions.push(source.data[i]);
               }
 
